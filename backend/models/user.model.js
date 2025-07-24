@@ -1,21 +1,21 @@
 import mongoose from 'mongoose';
-
+import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Name is required!'],
+        required: [true, "Name is required!"],
     },
     email: {
         type: String,
-        required: [true, 'Email is required!'],
+        required: [true, "Email is required!"],
         unique: true,
         lowercase: true,
         trim: true,
     },
     password:{
-        type:String,
-        required: [true, 'Password is required!'],
-        minlength: [8, 'Password must be at least 8 characters long!'],
+        type: String,
+        required: [true, "Password is required!"],
+        minlength: [8, "Password must be at least 8 characters long!"],
     },
     
     pickedItems:[{
@@ -33,13 +33,13 @@ const userSchema = new mongoose.Schema({
     role:{
         type: String,
         enum: ['buyer', 'seller', 'admin'],
-        default: 'user'
+        default: 'buyer'
     }
 }, {
     timestamps: true // Automatically manage createdAt and updatedAt fields
 });
 
-const User = mongoose.model('User', userSchema);
+
 
 //pre-save hook to hash password before saving
 userSchema.pre("save", async function(next) {
@@ -56,5 +56,6 @@ userSchema.pre("save", async function(next) {
 userSchema.methods.comparePassword = async function (password){ // Method to compare password
     return bcrypt.compare(password, this.password);
 }
+const User = mongoose.model('User', userSchema);
 
 export default User;

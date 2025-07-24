@@ -1,15 +1,11 @@
-import express from 'express';
-
+import express from "express";
+import {login, logout, signup} from '../controllers/auth.controller.js'; // Import the controller functions
 const router = express.Router();
 
-router.get("signup", (req, res) => {
-  res.send("Signup route");
-});
-router.get("/login", (req, res) => {
-  res.send("Login route");
-});
-router.get("/logout", (req, res) => {
-  res.send("Logout route");
-});
+router.post("/signup", signup);
 
-export default router;
+router.post("/login", login);
+
+router.post("/logout", logout);
+
+export default router; // Export the router to be used in the main server file
