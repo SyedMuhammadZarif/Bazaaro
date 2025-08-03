@@ -13,6 +13,9 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json()); // Middleware to parse JSON bodies // must give this before routes, got error for this !remember
 app.use(cookieParser()); // Middleware to parse cookies
 app.use('/api/auth', authRoutes); // Use the auth routes for authentication-related endpoints
+app.use('/api/products', productRoutes); // Use the product routes for product-related endpoints
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on port http://localhost:${PORT}`);
   connectDB();

@@ -1,4 +1,5 @@
 import Product from '../models/product.model.js';
+import { redis } from '../lib/redis.js';
 
 export const getAllProducts = async (req, res) => {
     try {
@@ -23,7 +24,21 @@ export const getMyProducts = async (req, res) => {
 
 export const getFeaturedProdicts = async (req,res) =>{
     try{
-        const featuredProducts = await Product.find({ isFeatured: true }); // Fetch featured products from the database
-        res.status(200).json(featuredProducts);
+        let featuredProducts = await redis.get("featured_products");
+        if (featuredProducts) {
+            featuredProducts = JSON.parse(featuredProducts); // Parse the cached featured products
+            return res.status(200).json(featuredProducts); // Respond with cached featured products
+        }
+        featuredProducts = await Product.find({ isFeatured: true }).lean(); // Fetch featured products from the database
+
+        if(!featuredProducts){
+            return res.status(404).json({ message: "No featured products found" }); // Handle case where no featured products are found
+        }
+
+        await redis.set("featured_products", JSON.stringify(featuredProducts));
+        res.json(featuredProducts);
+    } catch (error) {
+        console.error("Error fetching featured products:", error);
+        res.status(500).json({ message: "Internal server error" }); // Handle internal server error
     }
-}
+};
