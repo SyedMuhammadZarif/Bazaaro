@@ -27,11 +27,11 @@ export const protectRoute = async (req, res, next) => {
     }
 }
 
-export const buyerRoute = (req, res, next) => {
-    if (req.user && req.user.role === 'buyer') {
-        next(); // Proceed if the user is a buyer
+export const sellerRoute = (req, res, next) => {
+    if (req.user && req.user.role === 'seller') {
+        next(); // Proceed if the user is a seller
     } else {
-        res.status(403).json({ message: "Access denied: Not a buyer" }); // Handle access denied for non-buyers
+        res.status(403).json({ message: "Access denied: Not a seller" }); // Handle access denied for non-buyers
     }
 }
 
