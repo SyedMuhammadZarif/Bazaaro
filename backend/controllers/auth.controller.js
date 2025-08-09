@@ -61,7 +61,10 @@ export const refreshToken = async (req, res) => {
 export const signup = async (req, res) => {
     const { email, password, name, role } = req.body; // Destructure email, password, and name from the request body
     try {
-        
+        if (role ==="admin" || role !== "buyer" && role !== "seller") {
+            return res.status(400).json({ message: "Invalid role" }); // Handle invalid
+        }
+
         const userExists = await User.findOne({email}); // Check if user already exists
 
         if (userExists) {

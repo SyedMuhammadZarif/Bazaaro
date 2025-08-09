@@ -17,7 +17,13 @@ const productSchema = new mongoose.Schema({
     },
     images: {
         type: [String],// Array of image URLs
-        required: [true, 'Image is required!'],
+        validate: {
+            validator: function(v) {
+                return v.length <= 3; // Limit to 3 images
+            },
+            message: 'You can only upload up to 3 images'
+        },
+        required: [true, 'At least one image is required!']
     },
     category: {
         type: String,

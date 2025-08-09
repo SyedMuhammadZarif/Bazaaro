@@ -135,3 +135,31 @@ export const updateProduct = async (req, res) => {
         res.status(500).json({ message: "Internal server error" }); // Handle internal server error
     }
 };
+
+
+export const getProductsByCatergory = async (req, res) => {
+    const { category } = req.params; // Get the category from the request parameters
+    try{
+        const products = await Product.find({ category }); // Fetch products by category from the database
+        if (products.length === 0) {
+            return res.status(404).json({ message: "No products found in this category" }); // Handle case where no products are found in the category
+        }
+        res.status(200).json(products); // Respond with the list of products in the category
+    }catch (error) {
+        console.error("Error fetching products by category:", error);
+        res.status(500).json({ message: "Internal server error" }); // Handle internal server error
+    }
+};
+
+export const getProductById = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id); // Find the product by ID
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" }); // Handle case where product is not found
+        }
+        res.status(200).json(product); // Respond with the product details
+    } catch (error) {
+        console.error("Error fetching product by ID:", error);
+        res.status(500).json({ message: "Internal server error" }); // Handle internal server error
+    }
+}
