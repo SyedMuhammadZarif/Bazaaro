@@ -59,7 +59,7 @@ export const refreshToken = async (req, res) => {
 
 
 export const signup = async (req, res) => {
-    const { email, password, name } = req.body; // Destructure email, password, and name from the request body
+    const { email, password, name, role } = req.body; // Destructure email, password, and name from the request body
     try {
         
         const userExists = await User.findOne({email}); // Check if user already exists
@@ -67,7 +67,7 @@ export const signup = async (req, res) => {
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' }); 
         }
-        const user = await User.create({name, email, password}); // New user creation
+        const user = await User.create({name, email, password, role}); // New user creation
 
         //authenticate
         const {accessToken, refreshToken} = generateTokens(user._id); // Generate auth tokens, mongo stores as _id

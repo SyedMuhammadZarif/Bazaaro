@@ -17,6 +17,15 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is required!"],
         minlength: [8, "Password must be at least 8 characters long!"],
     },
+    profilePicture: {
+        type: String,
+        default: "https://example.com/default-profile-picture.png", // Default profile picture URL
+    },
+
+    coverPicture:{
+        type: String,
+        default: "https://example.com/default-cover-picture.png", // Default cover picture URL
+    },
     
     pickedItems:[{
         product:{
