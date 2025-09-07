@@ -1,11 +1,25 @@
-import express from "express";
-import { protectRoute, adminRoute, sellerRoute} from "../middleware/auth.middleware.js";
-import { createProduct, getAllProducts, getMyProducts, getFeaturedProducts } from "../controllers/product.controller.js"; // Import the product controller functions
-const router = express.Router();
+import express from "express"
+import { protectRoute, sellerRoute } from "../middleware/auth.middleware.js"
+import {
+  createProduct,
+  getAllProducts,
+  getMyProducts,
+  getFeaturedProducts,
+  updateProduct,
+  deleteProduct,
+  getProductById,
+  getProductsByCategory,
+} from "../controllers/product.controller.js"
 
-router.get("/", protectRoute, adminRoute, getAllProducts); // Route to get all products
-router.get("/myProducts", protectRoute, sellerRoute, getMyProducts); // Route to get products of the logged-in seller
-router.get("/featured", getFeaturedProducts); // Route to get featured products
-router.post("/", protectRoute, sellerRoute, createProduct); // Route to create a new product
+const router = express.Router()
 
-export default router; 
+router.get("/", protectRoute, getAllProducts)
+router.get("/myProducts", protectRoute, sellerRoute, getMyProducts)
+router.get("/featured", getFeaturedProducts)
+router.get("/category/:category", getProductsByCategory)
+router.get("/:id", getProductById)
+router.post("/", protectRoute, sellerRoute, createProduct)
+router.put("/:id", protectRoute, sellerRoute, updateProduct)
+router.delete("/:id", protectRoute, sellerRoute, deleteProduct)
+
+export default router

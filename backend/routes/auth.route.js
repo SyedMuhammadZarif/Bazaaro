@@ -1,13 +1,19 @@
-import express from "express";
-import {login, logout, signup, refreshToken} from '../controllers/auth.controller.js'; // Import the controller functions
-const router = express.Router();
+import express from "express"
+import { login, logout, signup, refreshToken, getCurrentUser, getSocketToken } from "../controllers/auth.controller.js" // Added getSocketToken import
+import { protectRoute } from "../middleware/auth.middleware.js"
 
-router.post("/signup", signup);
+const router = express.Router()
 
-router.post("/login", login);
+router.post("/signup", signup)
 
-router.post("/logout", logout);
+router.post("/login", login)
 
-router.post("/refresh-token", refreshToken); // Route for refreshing tokens
+router.post("/logout", logout)
 
-export default router; // Export the router to be used in the main server file
+router.post("/refresh-token", refreshToken) // Route for refreshing tokens
+
+router.get("/me", protectRoute, getCurrentUser)
+
+router.get("/socket-token", protectRoute, getSocketToken)
+
+export default router // Export the router to be used in the main server file
